@@ -8,7 +8,7 @@ const delAll = document.getElementById("delAll")
 let wishnum = 0;
 
 
-
+//체크박스 전체 체크 되면 전체선택 박스 체크기능
 checkdiv.addEventListener("click", (e)=>{
     let flag = false;
 
@@ -28,26 +28,26 @@ checkdiv.addEventListener("click", (e)=>{
     chAll.checked = flag
 })
 
+//전체선택
 chAll.addEventListener("click", ()=>{
     for(check of ch){
         check.checked = chAll.checked
     }
 })
 
+//선택삭제
 delAll.addEventListener("click", ()=>{
     for(check of ch){
         if(check.checked){
             wishnum = check.getAttribute("data-wnum")
 
-            console.log(wishnum)
+            delwish(wishnum)
         }
     }
 })
 
 //각 아이템별 삭제 기능
-checkdiv.addEventListener("click", (e)=>{
-
-    
+checkdiv.addEventListener("click", (e)=>{    
         let flag = false;
         for(del of delbtn){
             if(e.target.classList.contains("delbtn")){
@@ -74,29 +74,28 @@ checkdiv.addEventListener("click", (e)=>{
         }
 
         if(flag){
-            fetch("deleteWishList?wishlist_num="+wishnum,{
-                method:"get"
-            }).then(r=>r.text())
-            .then(r=>{
-                r = r.trim()
-
-                if(r>0){
-                    
-                    let delid = document.getElementById(wishnum)
-        
-                    delid.parentNode.parentNode.remove()
-        
-                }
-        
-            })
-        
-    }
-
-    
-
+            delwish(wishnum)
+        }
 
 })
 
+function delwish(wishnum){
+    fetch("deleteWishList?wishlist_num="+wishnum,{
+        method:"get"
+    }).then(r=>r.text())
+    .then(r=>{
+        r = r.trim()
+
+        if(r>0){
+            
+            let delid = document.getElementById(wishnum)
+
+            delid.parentNode.parentNode.remove()
+
+        }
+
+    })
+}
 
 
 
