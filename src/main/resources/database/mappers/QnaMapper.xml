@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+  <mapper namespace="com.team3.tamagochi.qna.QnaDAO">
+  	<select id="list" resultType="QnaDTO">
+  		SELECT * 
+	  		FROM (	
+	  			SELECT ROWNUM r, n.*
+				FROM(SELECT *
+					FROM QUESTION
+					<include refid="searchSql"/>
+					
+					<choose>
+						<when test="order == 1">
+							ORDER BY QUESTION_CREATE_DATE
+							DESC
+						</when>
+						<when test="order == 2">
+							ORDER BY QUESTION_HIT
+							DESC
+						</when>
+						<otherwise >
+							ORDER BY QUESTION_NUM
+							DESC
+						</otherwise>
+					</choose>
+					) n
+				)
+			WHERE r 
+			BETWEEN #{startRow} AND #{lastRow}	
+  	</select>
+  
+ 	  <sql id="searchSql">
+			<where>		
+				QUESTION_NUM > 0	
+				<choose>
+					<when test="kind == 'question_title'">
+						AND QUESTION_TITLE LIKE '%'||#{search}||'%'
+					</when>
+					<when test="kind == 'question_contents'">
+						AND QUESTION_CONTENTS LIKE '%'||#{search}||'%'
+					</when>
+					<otherwise>
+						AND USER_ID LIKE '%'||#{search}||'%'
+					</otherwise>
+				</choose>
+			</where>
+	</sql>
+  	
+  	<select id="getTotalCount" parameterType="Pager" resultType="java.lang.Long">
+		SELECT 
+			COUNT(QUESTION_NUM)
+		FROM(
+			SELECT *
+			FROM QUESTION
+			<include refid="searchSql"/>)
+	</select>
+
+</mapper>

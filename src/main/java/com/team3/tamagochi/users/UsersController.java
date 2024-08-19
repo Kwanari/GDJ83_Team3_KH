@@ -6,6 +6,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +15,10 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.team3.tamagochi.mypet.MyPetDTO;
 import com.team3.tamagochi.store.ItemDTO;
 import com.team3.tamagochi.store.WeaponDTO;
@@ -24,6 +29,15 @@ public class UsersController {
 	
 	@Autowired
 	private UsersService usersService;
+	
+	// NaverLoginBO
+	private NaverLoginBO naverLoginBO;
+	private String apiResult = null;
+	
+	@Autowired
+	private void setNaverLoginBO(NaverLoginBO naverLoginBO) {
+		this.naverLoginBO = naverLoginBO;
+	}
 	
 	
 	@GetMapping("register")
@@ -47,9 +61,17 @@ public class UsersController {
 	
 	
 	@GetMapping("login")
-	public void loginUsers(Model model, @CookieValue(name="remember", required=false, defaultValue="") String value) throws Exception{
+	public void loginUsers(Model model, @CookieValue(name="remember", required=false, defaultValue="") String value, HttpSession session) throws Exception{
 		
 		model.addAttribute("remember", value);
+		
+		// 네이버 로그인 코드
+		String naverAuthURL = naverLoginBO.getAuthorizationUrl(session);
+		
+		System.out.println("네이버:" + naverAuthURL);
+		
+		model.addAttribute("url", naverAuthURL);
+		
 	}
 	
 	@PostMapping("login")
@@ -293,5 +315,94 @@ public class UsersController {
 		
 		return "commons/message";
 	}
+	
+	// 네이버 로그인 성공시 callback 호출 메서드
+	@RequestMapping(value = "callback", method= {RequestMethod.GET, RequestMethod.POST})
+	public String callback(Model model, @RequestParam String code, @RequestParam String state, HttpSession session) throws Exception{
+		
+		System.out.println("여기는 callback");
+		OAuth2AccessToken oauthToken;
+		oauthToken = naverLoginBO.getAccessToken(session, code, state);
+		
+		// 1. 로그인 사용자 정보를 읽어온다
+		apiResult = naverLoginBO.getUserProfile(oauthToken);  // String 형식의 JSON 데이터
+		
+		/**
+		apiResult json 구조
+		{"resultcode":"00",
+		"message":"success",
+		"response":{"id":"33666449","nickname":"shinn****","age":"20-29","gender":"M","email":"sh@naver.com","name":"\uc2e0\ubc94\ud638"}}
+		**/
+		
+		// 2. String 형식인 apiResult를 JSON형태로 바꿈
+		JSONParser parser = new JSONParser();
+		Object obj = parser.parse(apiResult);
+		JSONObject jsonObj = (JSONObject)obj;
+		
+		System.out.println(jsonObj);
+		// 3. 데이터 파싱
+		// Top레벨 단계 _response 파싱
+		JSONObject response_obj = (JSONObject)jsonObj.get("response");
+		
+		//response에서 DB에 저장할 데이터 파싱
+		String nickname = (String)response_obj.get("nickname");
+		String mobile = (String)response_obj.get("mobile");
+		String name = (String)response_obj.get("name");
+		String id = (String)response_obj.get("id");
+		String email = (String)response_obj.get("email");
+		
+		UsersDTO usersDTO = new UsersDTO();
+		usersDTO.setUser_nickname(nickname);
+		usersDTO.setUser_phone(mobile);
+		usersDTO.setUser_name(name);
+		usersDTO.setUser_id(id);
+		usersDTO.setUser_email(email);
+		
+		//4.파싱 데이터 세션으로 저장
+		session.setAttribute("users_info", usersDTO); //세션 생성
+		
+		// 5. API로 로그인 했을 때 해당 id가 DB에 없으면 DB에 유저 정보를 insert한다
+		// DB에 유저 정보를 insert할 때 동시에 기본 캐릭터 생성 메서드도 실행
+		List<UsersDTO> checkID = usersService.findID(usersDTO);
+		if(checkID.size()==0) {
+			int result = usersService.insertNaverProfile(usersDTO);
+			result = usersService.setDefaultCharacter(usersDTO);
+		}
+		
+		
+		return "redirect:/";
+	}
+	
+	/*  거래 관련 메서드들 (이렇게 많을 줄 알았으면 패키지를 따로 만드는건데 실수함)  */
+	// 유저의 거래 내역 조회 메서드
+	@GetMapping("tradeList")
+	public void getTradeList(Model model, TransactionDTO transactionDTO, HttpSession session) throws Exception{
+		
+		UsersDTO usersDTO = new UsersDTO();
+		usersDTO = (UsersDTO)session.getAttribute("users_info");
+		transactionDTO.setUser_id(usersDTO.getUser_id());
+		
+		List<TransactionDTO> list = usersService.getTradeList(transactionDTO);
+		
+		model.addAttribute("list", list);
+	}
+	
+	// transaction_type에 따른 거래 내역 정렬 메서드
+	@GetMapping("tradeList/select")
+	public String selectType(Model model, TransactionDTO transactionDTO, HttpSession session) throws Exception{
+		
+		UsersDTO usersDTO = new UsersDTO();
+		usersDTO = (UsersDTO)session.getAttribute("users_info");
+		transactionDTO.setUser_id(usersDTO.getUser_id());
+		
+		List<TransactionDTO> list = usersService.selectType(transactionDTO);
+		
+		model.addAttribute("list", list);
+		
+		return "users/selectTypeForm"; 
+	}
+	
+	
+	
 	
 }

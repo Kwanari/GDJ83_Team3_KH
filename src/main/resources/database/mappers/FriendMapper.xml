@@ -6,10 +6,12 @@
   <!-- namespace는 꼭 들어가야될 속성 -->
   <mapper namespace="com.team3.tamagochi.friend.FriendDAO">
   
+  	<!-- 친구 만들기 -->
   	<insert id="makeFriends" parameterType="FriendDTO">
   		INSERT INTO FRIEND VALUES (FRIEND_SEQ.NEXTVAL, #{user_id}, #{friend_id})
   	</insert>
   	
+  	<!-- 친구 리스트 -->
   	<select id="getFriendList" parameterType="FriendDTO" resultMap="detailFriend">
   		SELECT u.*, f.*
 			FROM USERS u 
@@ -19,6 +21,7 @@
 		WHERE u.USER_ID =#{user_id}
   	</select>
   	
+  	<!-- 친구 디테일 -->
   	<select id="getFriendDetail" parameterType="FriendDTO" resultMap="detailFriend">
   		SELECT u.*, f.*
 			FROM USERS u 
@@ -45,6 +48,7 @@
   		</collection>
   	</resultMap>
   	
+  	<!-- 친구 삭제 -->
   	<delete id="deleteFriend" parameterType="FriendDTO">
   		DELETE FROM FRIEND WHERE friend_num = #{friend_num}
   	</delete>
@@ -71,5 +75,13 @@
   			<result column="USER_ID" property="user_id"/>
   		</association>
   	</resultMap>
+  	
+  	<insert id="takeGift" parameterType="InventoryDTO">
+  		INSERT INTO INVENTORY VALUES (INVEN_SEQ.NEXTVAL, #{item_num}, #{user_id})
+  	</insert>
+  	
+  	<delete id="sendGift" parameterType="InventoryDTO">
+  		DELETE INVENTORY WHERE ITEM_NUM = #{item_num} AND USER_ID = #{user_id}
+  	</delete>
   	
   </mapper>

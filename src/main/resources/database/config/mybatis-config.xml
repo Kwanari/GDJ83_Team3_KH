@@ -18,10 +18,13 @@
   		<typeAlias type="com.team3.tamagochi.store.WishListDTO" alias="WishListDTO"/>
   		
   		<typeAlias type="com.team3.tamagochi.notice.NoticeDTO" alias="NoticeDTO"/>
+  		<typeAlias type="com.team3.tamagochi.qna.QnaDTO" alias="QnaDTO"/>
+  		
   		
   		<typeAlias type="com.team3.tamagochi.mypet.MyPetDTO" alias="MyPetDTO"/>
   		
   		<typeAlias type="java.util.Map" alias="Map"/>
+  		<typeAlias type="com.team3.tamagochi.boards.util.Pager" alias="Pager"/>
   		
   	</typeAliases>
 

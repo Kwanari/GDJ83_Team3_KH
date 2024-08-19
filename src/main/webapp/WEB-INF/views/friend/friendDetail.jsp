@@ -85,7 +85,7 @@
 								</div>
 								
 								<!-- 내 인벤토리 모달창 -->
-								<div id="">
+								
 									<div class="modal fade" id="sendGiftModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="sendGiftModal" aria-hidden="true">
 										<div class="modal-dialog modal-lg modal-dialog-scrollable">
 										  <div class="modal-content">
@@ -98,13 +98,13 @@
 											<div class="modal-body">
 											 <!-- 인벤토리 리스트 -->
 											 <div class="tm-block-col tm-col-account-settings" id="inventoryList">
-												<div class="tm-bg-primary-dark tm-block tm-block-settings">
-													<h2 class="tm-block-title">캐릭터 정보</h2>
+												<div class="row tm-bg-primary-dark tm-block tm-block-settings">
+													<h2 class="tm-block-title col-sm-12 col-md-12 col-lg-12 col-xl-12">선물을 골라주세요</h2>
 													<c:forEach items="${inventoryList}" var="invenItem">
 														<!-- 브라우저 사이즈에 따라 column 길이 변화 -->
-														<div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
+														<div class=" col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
 															<!-- 카드형 태그 -->
-															<div class="card h-10">
+															<div class="card">
 																<!-- 카드형 상부 이미지 -->
 																<img src="/resources/img/character/4.gif" class="card-img-top"
 																	alt="...">
@@ -115,7 +115,8 @@
 																	<h5 class="card-title">체력 증가 : ${invenItem.item_hp }</h5>
 																	<h5 class="card-title">공격력 증가 : ${invenItem.item_atk }</h5>
 																	<h5 class="card-title">회피력 증가 : ${invenItem.item_dod }</h5>
-																	<button id="sendSelectedGift" type="button" class="btn btn-primary chatBtn">선물 보내기</button>	
+																	<a href="./sendGift?item_num=${invenItem.item_num}&user_id=${friendInfoDTO.user_id}" 
+																	id="sendSelectedGift" type="button" class="btn btn-primary chatBtn">선물 보내기</a>	
 																</div>
 															</div>
 														</div>
@@ -127,7 +128,7 @@
 										  </div>
 										</div>
 									  </div>
-								   </div>
+								   
 								
 								<div class="form-group col-lg-6">
 									<label class="tm-hide-sm">&nbsp;</label>

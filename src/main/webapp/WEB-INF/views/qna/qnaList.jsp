@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
-<title>NOTICE</title>
+<title>QUESTION</title>
 <c:import url="../template/header.jsp"></c:import>
 <link rel="stylesheet" href="/resources/css/boardSY.css">
 </head>
@@ -12,7 +12,7 @@
 <div class="container mt-5">
       <div class="row tm-content-row">
         <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9 tm-block-col">
-				<h1 class="text-white mt-2 mb-2">공지사항</h1>
+				<h1 class="text-white mt-2 mb-2">문의 게시판</h1>
           <div class="tm-bg-primary-dark tm-block tm-block-products">
           
          <div class="form-group mb-3">
@@ -23,8 +23,8 @@
 							<div class="col-auto">
 								<select id="kind" name="kind" class="custom-select mr-sm-2">
 									<option value="user_id" ${pager.kind eq 'user_id' ? 'selected' : ''}>작성자</option>
-	              					<option value="notice_title" ${pager.kind eq 'notice_title' ? 'selected' : ''}>제목</option>
-	              					<option value="notice_contents" ${pager.kind eq 'notice_contents' ? 'selected' : ''}>내용</option>
+	              					<option value="question_title" ${pager.kind eq 'question_title' ? 'selected' : ''}>제목</option>
+	              					<option value="question_contents" ${pager.kind eq 'question_contents' ? 'selected' : ''}>내용</option>
 								</select>
 							</div>
 							
@@ -70,11 +70,11 @@
 					<c:forEach var="list" items="${list}">
                   <tr>
                     <th scope="row"></th>
-                    <td>${list.notice_num}</td>
+                    <td>${list.question_num}</td>
                     <td>${list.user_id}</td>
-                    <td><a id= "anotice" href="noticeDetail?notice_num=${list.notice_num}" class="btn" >${list.notice_title}</a></td>
-                    <td>${list.notice_create_date}</td>
-                    <td>${list.notice_hit}</td>
+                    <td><a id= "aquestion" href="questionDetail?question_num=${list.question_num}" class="btn" >${list.question_title}</a></td>
+                    <td>${list.question_create_date}</td>
+                    <td>${list.question_hit}</td>
                     
                   </tr>
                   </c:forEach>
@@ -84,16 +84,16 @@
             <!-- table container -->
    <nav aria-label="Page navigation example">
           <ul class="pagination justify-content-center">
-            <li class="page-item ${pager.pre ? '' : 'disabled'}"><a class="page-link" href="./noticeList?page=${pager.startNum-1}&kind=${pager.kind}&search=${pager.search}">Previous</a></li>
+            <li class="page-item ${pager.pre ? '' : 'disabled'}"><a class="page-link" href="./questionList?page=${pager.startNum-1}&kind=${pager.kind}&search=${pager.search}">Previous</a></li>
             <c:forEach begin="${pager.startNum}" end="${pager.lastNum}" var="i">
-              <li class="page-item"><a class="page-link ${pager.page == i ? 'active' : ''  }" href="./noticeList?page=${i}&kind=${pager.kind}&search=${pager.search}">${i}</a></li>
+              <li class="page-item"><a class="page-link ${pager.page == i ? 'active' : ''  }" href="./questionList?page=${i}&kind=${pager.kind}&search=${pager.search}">${i}</a></li>
             </c:forEach>
-            <li class="page-item ${pager.next ? '':'disabled'}"><a class="page-link" href="./noticeList?page=${pager.lastNum+1}&kind=${pager.kind}&search=${pager.search}">Next</a></li>
+            <li class="page-item ${pager.next ? '':'disabled'}"><a class="page-link" href="./questionList?page=${pager.lastNum+1}&kind=${pager.kind}&search=${pager.search}">Next</a></li>
           </ul>
         </nav>         
             <a
-              href="./noticeAdd"
-              class="btn btn-primary btn-block text-uppercase mb-3">공지사항 글쓰기</a>
+              href="./questionAdd"
+              class="btn btn-primary btn-block text-uppercase mb-3">문의사항 글쓰기</a>
    
           </div>
         </div>
@@ -106,8 +106,6 @@
                   <tr>
                     <td class="tm-notice-notice">공지사항</td>
                     <td class="text-center">
-                      <a href="#" class="">
-                      </a>
                     </td>
                   </tr>
                   <tr>

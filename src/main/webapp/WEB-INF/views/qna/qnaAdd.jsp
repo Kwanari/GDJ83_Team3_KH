@@ -7,7 +7,7 @@
 </head>
 <body id="reportsPage" class="font">
 	<div class="" id="home">
-	<c:import url="./template/topbar.jsp"></c:import>
+	<c:import url="../template/topbar.jsp"></c:import>
 	
 	<div class="container">
         <div class="row">

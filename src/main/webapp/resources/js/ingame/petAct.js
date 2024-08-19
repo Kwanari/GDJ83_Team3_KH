@@ -3,6 +3,7 @@ const myPetAct = document.getElementById("myPet"); //다마고치 이미지
 const actPetParent = document.getElementById("petParent"); //다마고치 이미지 감싼 것
 const actImg = document.getElementById("actImg"); //모달 안의 이미지
 const modalImg = document.getElementById("modalImg"); //actImg 감싼 태그
+const weaponImg = document.createElement("img");
 
 
 //=====================버튼 관련======================
@@ -28,7 +29,8 @@ const pet_exp = document.getElementById("pet_exp"); //경험치
 const pet_hungry = document.getElementById("pet_hungry"); //포만감
 const pet_hp = document.getElementById("pet_hp"); //체력
 const pet_level = document.getElementById("pet_level"); //레벨
-const pet_name = document.getElementById("pet_name");
+const pet_name = document.getElementById("pet_name"); //이름
+const pet_washroom = document.getElementById("pet_washroom");//화장실
 
 
 
@@ -53,6 +55,7 @@ feed.addEventListener("click", ()=>{
         .then((r)=>{
                 pet_exp.value = r.pet_exp;
                 pet_hungry.value = r.pet_hungry;
+                pet_washroom.value = r.pet_washroom;
 
                 modalActLabel.innerHTML = "다 먹었어요";
                 actImg.src = "/resources/img/petAct/doneFeeding.gif";
@@ -156,6 +159,7 @@ clean.addEventListener("click", ()=>{
         .then(r=>r.json())
         .then((r)=>{
                 pet_hp.value = r.pet_hp;
+                pet_washroom.value = r.pet_washroom;
 
                 modalActLabel.innerHTML = "청소 끝";
                 actImg.src = "/resources/img/petAct/doneFeeding.gif";
@@ -165,6 +169,7 @@ clean.addEventListener("click", ()=>{
                 h4Two.innerHTML = "";
                 modalImg.append(h4One);
                 modalImg.append(h4Two);
+                weaponImg.remove();
 
         })
         .then((r)=>{
@@ -209,6 +214,27 @@ petStatusBtn.addEventListener("click", ()=>{
             levelUpBtn.style.display = "inline";
             petReady.innerHTML="레벨업 준비완료";
             
+        } 
+
+        if(r.pet_washroom >= 100) {
+            pet_washroom.value = r.pet_washroom;
+
+            weaponImg.src = "/resources/img/ingame/poop.png";
+            weaponImg.setAttribute("id", "poop");
+
+            followingPetText.innerHTML = "똥.. 치워주세요";
+            followingPetText.setAttribute("id", "followingPetText");
+            followingPetDiv.append(followingPetText);
+            followingPetDiv.setAttribute("id", "followingPetDiv");
+            followingPetDiv.style.left = myPetAct.style.left;
+            followingPetDiv.style.top = myPetAct.style.top;
+            actPetParent.append(followingPetDiv);
+            actPetParent.append(weaponImg);
+    
+            setTimeout(()=>{
+                followingPetDiv.remove();
+            }, 10000)
+
         }
         
     })
@@ -241,6 +267,26 @@ levelUpBtn.addEventListener("click", ()=>{
             
             modalImg.append(h4One);
             modalImg.append(h4Two);
+
+            weaponImg.src = "/resources/img/ingame/guitar.png";
+            weaponImg.setAttribute("id", "weaponImg");
+
+            followingPetText.innerHTML = "락스피릿";
+            followingPetText.setAttribute("id", "followingPetText");
+            followingPetDiv.append(followingPetText);
+            followingPetDiv.setAttribute("id", "followingPetDiv");
+            followingPetDiv.style.left = myPetAct.style.left;
+            followingPetDiv.style.top = myPetAct.style.top;
+            weaponImg.style.left = myPetAct.style.left;
+            weaponImg.style.top = myPetAct.style.top;
+
+            actPetParent.append(followingPetDiv);
+            actPetParent.append(weaponImg);
+
+            setTimeout(()=>{
+                followingPetDiv.remove();
+                weaponImg.remove();
+            }, 10000)
 
             // actCloseBtn.addEventListener("click", ()=>{
             //     document.querySelector(".modal-backdrop").remove();

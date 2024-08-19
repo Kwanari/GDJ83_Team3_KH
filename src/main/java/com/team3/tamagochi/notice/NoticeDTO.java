@@ -2,7 +2,9 @@ package com.team3.tamagochi.notice;
 
 import java.sql.Date;
 
-public class NoticeDTO {
+import com.team3.tamagochi.files.FileDTO;
+
+public class NoticeDTO extends FileDTO{
 	
 	private Long notice_num;
 	private String user_id;

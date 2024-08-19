@@ -9,6 +9,9 @@ import org.springframework.util.StringUtils;
 
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth2AccessToken;
+import com.github.scribejava.core.model.OAuthRequest;
+import com.github.scribejava.core.model.Response;
+import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth20Service;
 import com.github.scribejava.core.oauth.OAuthService;
 
@@ -21,7 +24,7 @@ public class NaverLoginBO {
 	//state: 애플리케이션이 생성한 상태 토큰
 	private final static String CLIENT_ID = "";
 	private final static String CLIENT_SECRET = "";
-	private final static String REDIRECT_URI = "";
+	private final static String REDIRECT_URI = "http://localhost:80/users/callback";
 	private final static String SESSION_STATE = "oauth_state";
 	/* 프로필 조회 API URL */
 	private final static String PROFILE_API_URL = "https://openapi.naver.com/v1/nid/me";
@@ -80,5 +83,19 @@ public class NaverLoginBO {
 	private String getSession(HttpSession session) {
 		return (String)session.getAttribute(SESSION_STATE);
 	}
+	
+	/* Access Token을 이용하여 네이버 사용자 프로필 API를 호출 */
+	public String getUserProfile(OAuth2AccessToken oauthToken) throws IOException{
+		
+		 OAuth20Service oauthService = new ServiceBuilder()
+				 .apiKey(CLIENT_ID)
+				 .apiSecret(CLIENT_SECRET)
+				 .callback(REDIRECT_URI).build(NaverLoginAPI.instance());
+		 
+		 OAuthRequest request = new OAuthRequest(Verb.GET, PROFILE_API_URL, oauthService);
+		 oauthService.signRequest(oauthToken, request);
+		 Response response = request.send();
+		 return response.getBody();
 
+	}
 }

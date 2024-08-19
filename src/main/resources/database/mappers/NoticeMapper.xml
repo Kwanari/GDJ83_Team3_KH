@@ -5,18 +5,61 @@
 
   <mapper namespace="com.team3.tamagochi.notice.NoticeDAO">
   
-  	<select id="list" resultType="NoticeDTO" parameterType="NoticeDTO">
-  		SELECT
-  			NOTICE_NUM
-  			,USER_ID
-  			,NOTICE_TITLE
-  			,NOTICE_CREATE_DATE
-  			,NOTICE_HIT
-  			,NOTICE_CONTENTS
-  		FROM
-  			NOTICE
+	  <select id="list" resultType="NoticeDTO" parameterType="Pager">
+	  		SELECT * 
+	  		FROM (	
+	  			SELECT ROWNUM r, n.*
+				FROM(SELECT *
+					FROM NOTICE
+					<include refid="searchSql"/>
+					
+					<choose>
+						<when test="order == 1">
+							ORDER BY NOTICE_CREATE_DATE
+							DESC
+						</when>
+						<when test="order == 2">
+							ORDER BY NOTICE_HIT
+							DESC
+						</when>
+						<otherwise >
+							ORDER BY NOTICE_NUM
+							DESC
+						</otherwise>
+					</choose>
+					) n
+				)
+			WHERE r 
+			BETWEEN #{startRow} AND #{lastRow}
+			
+	  	
+	  </select>
   	
-  	</select>
+	  <sql id="searchSql">
+			<where>		
+				NOTICE_NUM > 0	
+				<choose>
+					<when test="kind == 'notice_title'">
+						AND NOTICE_TITLE LIKE '%'||#{search}||'%'
+					</when>
+					<when test="kind == 'notice_contents'">
+						AND NOTICE_CONTENTS LIKE '%'||#{search}||'%'
+					</when>
+					<otherwise>
+						AND USER_ID LIKE '%'||#{search}||'%'
+					</otherwise>
+				</choose>
+			</where>
+	</sql>
+  	
+  	 <select id="getTotalCount" parameterType="Pager" resultType="java.lang.Long">
+		SELECT 
+			COUNT(ROWNUM)
+		FROM(
+			SELECT *
+			FROM NOTICE
+			<include refid="searchSql"/>)
+	</select>
   	
   	<insert id="add" parameterType="NoticeDTO">
   		INSERT INTO NOTICE
@@ -47,5 +90,23 @@
 
   	
   	</resultMap>
+  	
+  	
+  	<update id="hit" parameterType="NoticeDTO">
+  		UPDATE NOTICE
+		SET NOTICE_HIT = NOTICE_HIT +1
+		WHERE NOTICE_NUM = #{notice_num}
+  	
+  	</update>
+  	
+  	<delete id="delete" parameterType="NoticeDTO">
+  		DELETE FROM NOTICE WHERE NOTICE_NUM = #{notice_num}
+  	</delete>
+  	
+  	<update id="update" parameterType="NoticeDTO">
+		UPDATE	NOTICE
+		SET		NOTICE_TITLE = #{notice_title}, NOTICE_CONTENTS = #{notice_contents}
+		WHERE 	NOTICE_NUM = #{notice_num}
+	</update>
   	
   </mapper>

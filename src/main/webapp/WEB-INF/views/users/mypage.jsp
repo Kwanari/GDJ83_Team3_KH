@@ -77,6 +77,10 @@
 									<button type="button" id="check"
 									class="btn btn-primary btn-block text-uppercase">회원 정보 수정</button>
 								</div>
+								<div class="form-group col-lg-6"></div>
+								<div class="col-12">
+									<a href="/users/tradeList" class="btn btn-success btn-block text-uppercase">거래 내역 조회</a>
+								</div>
 							</form>
 						</div>
 					</div>

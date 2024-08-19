@@ -98,6 +98,44 @@
   			USER_EMAIL = #{user_email} AND USER_PHONE = #{user_phone}
   	</select>
   	
+  	<!-- 네이버 API로 로그인 했을 때, 첫 로그인 시 회원 정보를 DB에 입력하는 쿼리문 -->
+  	<insert id="insertNaverProfile">
+  		INSERT INTO USERS
+  		(USER_ID, USER_NAME, USER_NICKNAME, USER_PHONE, USER_EMAIL)
+		VALUES
+		(#{user_id}, #{user_name}, #{user_nickname}, #{user_phone}, #{user_email})
+  	</insert>
+  	
+  	<!-- 해당 유저의 거래 내역 조회 쿼리 -->
+  	<select id="getTradeList" parameterType="com.team3.tamagochi.users.TransactionDTO" resultMap="TradeList">
+  		SELECT i.ITEM_NAME, t.TRANSACTION_DATE, t.TRANSACTION_AMOUNT, t.TRANSACTION_TYPE
+  		FROM TRANSACTION t
+		INNER JOIN ITEM i
+		ON (t.ITEM_NUM = i.ITEM_NUM)
+		WHERE t.USER_ID =#{user_id}
+  	</select>
+  	<resultMap type="com.team3.tamagochi.users.TransactionDTO" id="TradeList">
+  		<id column="TRANSACTION_NUM" property="transaction_num"></id>
+  		<result column="USER_ID" property="user_id"></result>
+  		<result column="ITEM_NUM" property="item_num"></result>
+  		<result column="TRANSACTION_DATE" property="transaction_date"></result>
+  		<result column="TRANSACTION_AMOUNT" property="transaction_amount"></result>
+  		<result column="TRANSACTION_TYPE" property="transaction_type"></result>
+  		
+  		<association property="itemDTO" javaType="ItemDTO">
+			<result column="ITEM_NAME" property="item_name"></result>  		
+  		</association>
+  	</resultMap>
+  	
+  	<!-- transaction type에 따른 검색 리스트 -->
+  	<select id="selectType" parameterType="com.team3.tamagochi.users.TransactionDTO" resultMap="TradeList">
+  		SELECT i.ITEM_NAME, t.TRANSACTION_DATE, t.TRANSACTION_AMOUNT, t.TRANSACTION_TYPE
+  		FROM TRANSACTION t
+		INNER JOIN ITEM i
+		ON (t.ITEM_NUM = i.ITEM_NUM)
+		WHERE t.USER_ID =#{user_id} AND t.TRANSACTION_TYPE = #{transaction_type}
+  	</select>
+  	
   	
   	
   	

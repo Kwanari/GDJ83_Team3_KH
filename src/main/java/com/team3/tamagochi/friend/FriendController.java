@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.socket.WebSocketSession;
 
 import com.team3.tamagochi.store.ItemDTO;
+import com.team3.tamagochi.users.InventoryDTO;
 import com.team3.tamagochi.users.UsersDTO;
 
 @Controller
@@ -50,15 +51,24 @@ public class FriendController {
 		model.addAttribute("inventoryList", inventoryList);
 	}
 	
-//	@GetMapping("sendGift")
-//	public void getInvenList(UsersDTO usersDTO, Model model, HttpSession session) throws Exception {
-//		usersDTO = (UsersDTO) session.getAttribute("users_info");
-//		
-//		List<ItemDTO> inventoryList  = friendService.getInvenList(usersDTO);
-//		
-//		model.addAttribute("inventoryList", inventoryList);
-//		System.out.println(inventoryList.get(0).getItem_name());
-//	}
+	@GetMapping("sendGift")
+	public String getInvenList(InventoryDTO inventoryDTO, HttpSession session, Model model) throws Exception {
+		UsersDTO usersDTO = (UsersDTO) session.getAttribute("users_info");
+		InventoryDTO userInventoryDTO = new InventoryDTO();
+		userInventoryDTO.setUser_id(usersDTO.getUser_id());
+		userInventoryDTO.setItem_num(inventoryDTO.getItem_num());
+		int result = friendService.takeGift(inventoryDTO);
+		
+		result = friendService.sendGift(userInventoryDTO);
+		if(result > 0) {
+			model.addAttribute("result", "선물을 보냈습니다");
+			model .addAttribute("url", "./friendList");
+		}else {
+			model.addAttribute("result", "오류발생.");
+			model .addAttribute("url", "./friendList");
+		}
+		return "commons/message";
+	}
 	
 	@GetMapping("deleteFriend")
 	public String deleteFriend(FriendDTO friendDTO, Model model) throws Exception{

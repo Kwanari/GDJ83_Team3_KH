@@ -12,7 +12,7 @@ const loginFriendId = friendStatus.getAttribute("data-friend-id"); //친구 아�
 console.log("친구: "+loginFriendId);
 console.log("나:" + loginUserId);
 
-const sendGiftBtn = document.getElementById("sendGiftBtn");
+
 
 
 

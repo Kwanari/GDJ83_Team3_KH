@@ -26,6 +26,16 @@ public class Pager {
 	private boolean next;
 	// 나눌 페이저의 갯수
 	private long perPage = 10L;
+	//정렬
+	private Integer order;
+	
+	public Integer getOrder() {
+		return order;
+	}
+
+	public void setOrder(Integer order) {
+		this.order = order;
+	}
 
 	public String getKind() {
 		return kind;
@@ -47,7 +57,7 @@ public class Pager {
 	}
 
 	public Long getPage() {
-		if (this.page == null || this.page < 1) {
+		if (this.page == null || this.page < 1L) {
 			this.page = 1L;
 		}
 		return page;
@@ -58,6 +68,10 @@ public class Pager {
 	}
 
 	public Long getStartRow() {
+		
+		if (this.startRow == null || this.startRow < 1L) {
+			this.page = 1L;
+		}
 		return startRow;
 	}
 
@@ -112,6 +126,10 @@ public class Pager {
 	public void setPerPage(long perPage) {
 		this.perPage = perPage;
 	}
+	
+	public Pager(){
+		this.setPage(1L);
+	}
 
 	// rownum 계산
 	public void makerow() throws Exception {
@@ -127,7 +145,7 @@ public class Pager {
 			totalPage++;
 		}
 
-		long perBlock = 10L; // 한 페이지에 보여질 페이지 번호의 개수
+		long perBlock = 5L; // 한 페이지에 보여질 페이지 번호의 개수
 		long totalBlock = 0;
 
 		totalBlock = totalPage / perBlock;
@@ -150,13 +168,13 @@ public class Pager {
 	
 
 		// 이전 다음
-		this.pre = true;
+		this.pre = true; //true면 이전 블럭이 존재, false면 이전 블럭이 없음
 		this.next = true;
 		if (curBlock == 1) {
-			pre = false;
+			pre = false; //페이지 1번의 앞이 있을 수 없으니까
 		}
 		if (curBlock == totalBlock) {
-			next = false;
+			next = false; //다음이 없으면 마지막페이지일테니끼
 			lastNum = totalPage;
 		}
 

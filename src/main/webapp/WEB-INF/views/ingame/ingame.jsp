@@ -125,6 +125,11 @@
 										<input id="pet_hungry" name="pet_hungry" value="${myPetDTO.pet_hungry}"
 											type="text" class="form-control validate" readonly style="background-color:#4e657a"/>
 									</div>
+									<div class="form-group col-lg-12">
+										<label for="pet_washroom">화장실</label>
+										<input id="pet_washroom" name="pet_washroom" value="${myPetDTO.pet_washroom}"
+											type="text" class="form-control validate" readonly style="background-color:#4e657a"/>
+									</div>
 								</form>
 							</div>
 						  </div>

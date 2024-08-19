@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.team3.tamagochi.store.ItemDTO;
+import com.team3.tamagochi.users.InventoryDTO;
 import com.team3.tamagochi.users.UsersDTO;
 
 @Service
@@ -35,5 +36,15 @@ public class FriendService {
 	public List<ItemDTO> getInvenList(UsersDTO usersDTO) throws Exception{
 			
 		return friendDAO.getInvenList(usersDTO);
+	}
+	
+	// 선물 받기
+	public int takeGift(InventoryDTO inventoryDTO) throws Exception {
+		return friendDAO.takeGift(inventoryDTO);
+	}
+	
+	// 선물 주기
+	public int sendGift (InventoryDTO inventoryDTO) throws Exception {
+		return friendDAO.sendGift(inventoryDTO);
 	}
 }

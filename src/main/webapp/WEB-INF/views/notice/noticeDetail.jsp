@@ -5,7 +5,7 @@
 <head>
 <title>NOTICE</title>
 <c:import url="../template/header.jsp"></c:import>
-
+<link rel="stylesheet" href="/resources/css/boardSY.css">
 </head>
 <body id="reportsPage" class="font">
 		<c:import url="../template/topbar.jsp"></c:import>
@@ -16,53 +16,66 @@
           <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
             <div class="row">
               <div class="col-12">
-                <h2 class="tm-block-title d-inline-block">공지사항 상세정보</h2>
+                <h1 class="tm-block-title d-inline-block">공지사항 상세정보</h1>
               </div>
             </div>
             <div class="row tm-edit-product-row">
-              <div class="col-xl-12 col-lg-6 col-md-12">
+              <div class="col-xl-12 col-lg-12 col-md-12">
               <form action="noticeAdd" class="tm-edit-product-form" method="post">
                 <input type="hidden" value="${users_info.user_id}" name="user_id">
-                  <div class="form-group mb-3">
+                <div>
+                  <div id="noticetitle"class="form-group mb-10">
                     <label
                       for="name"
                       >제목
                     </label>
-                    <input id="notice_title" name="notice_title" type="text" class="form-control validate" value="${detail.notice_title }"required/>
-                  </div> <div class="form-group mb-3">
+                    <input size= "50" id="notice_title" name="notice_title" type="text" class="form-control validate" value="${detail.notice_title }" readonly style="background-color:#4e657a"/>
+                  </div> 
+                  
+                  <div id="noticehit" class="form-group mb-3">
+			        <label
+			          for="name"
+			          >조회수
+			        </label>
+			        <input size= "10"id="notice_hit" name="notice_hit" type="text" class="form-control validate" value="${detail.notice_hit}"readonly style="background-color:#4e657a"/>
+			      </div> 
+                  </div>
+                  <div>
+                  <div id="noticename" class="form-group mb-3">
                     <label
                       for="name"
                       >작성자
                     </label>
-                    <input id="user_id" name="user_id" type="text" class="form-control validate" required/>
+                    <input size= "30"id="user_id" name="user_id" type="text" class="form-control validate" value="${detail.user_id}"readonly style="background-color:#4e657a"/>
+                  </div>
+                  
+                  <div id="noticedate" class="form-group mb-3">
+                    <label
+                      for="name"
+                      >등록일
+                    </label>
+                    <input size= "30"id="notice_create_date" name="notice_create_date" type="text" class="form-control validate" value="${detail.notice_create_date}"readonly style="background-color:#4e657a"/>
+                  </div>
                   </div>
                   <div class="form-group mb-3">
                     <label for="contents">내용</label>
                     <textarea 
-                      class="form-control validate" name="notice_contents" id="notice_contents"rows="10"required></textarea>
+                      class="form-control validate" name="notice_contents" id="notice_contents"rows="10" readonly style="background-color:#4e657a">${detail.notice_contents}</textarea>
                   </div>
-                  <div class="form-group mb-3"></div>
-			</div>
-              <div class=" col-md-12 mx-auto mb-4">
-                <div style="height:60% " class="tm-product-img-dummy mx-auto">
-                  <i
-                    class="fas fa-cloud-upload-alt tm-upload-icon"
-                    onclick="document.getElementById('fileInput').click();"
-                  ></i>
-                </div>
-                <div class="custom-file mt-3 mb-3">
-                  <input id="fileInput" type="file" style="display:none;" />
-                  <input
-                    type="button"
-                    class="btn btn-primary btn-block mx-auto"
-                    value="파일 업로드"
-                    onclick="document.getElementById('fileInput').click();"
-                  />
-                </div>
+                  
+                  
+                  
+                  
+                  
+              
+              <div class="col-12" id="detail_back">
+                <a href="./noticeList" class="btn btn-primary btn-block text-uppercase">목록</a>
               </div>
-              <div class="col-12">
-                <button type="submit" name="noticeAdd" class="btn btn-primary btn-block text-uppercase">등록</button>
-              </div>
+              
+              <c:if test="${users_info.user_id eq detail.user_id}">
+              <a href="./noticeUpdate?notice_num=${detail.notice_num}" class="btn btn-outline-success mb-3">수정</a>
+              <a href="./delete?notice_num=${detail.notice_num}" id="deletea" class="btn btn-outline-delete mb-3">삭제</a>
+              </c:if>
             </form>
             </div>
           </div>

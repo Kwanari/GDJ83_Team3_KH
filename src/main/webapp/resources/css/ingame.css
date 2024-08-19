@@ -9,8 +9,8 @@
 #rightArrow {
     width: 10%;
     position: absolute;
-    left: 1500px;
-    top: 600px;
+    left: 80%;
+    top: 70%;
     cursor: pointer;
 }
 
@@ -51,7 +51,7 @@ h3 {
 #followingPetDiv {
     position: absolute;
     width: 100px;
-    height: 50;
+    
     border: solid 2px black;
     background-color: white;
     justify-content: center;
@@ -71,4 +71,18 @@ h3 {
 
 #actCloseBtn {
     display: none;
+}
+
+#poop {
+    position: absolute;
+    width: 20%;
+    left: 500px;
+    top: 500px;
+}
+
+#weaponImg {
+    position: absolute;
+    width: 20%;
+    left: 50%;
+    top: 40%;
 }

@@ -1,3 +1,26 @@
 @charset "UTF-8";
-a:link { color: skyblue; }
-a:visited { color:pink; }
+#anotice:link { color: white; }
+#anotice:visited { color:pink; }
+
+#noticetitle{display: inline-block; height:10%;}
+#noticehit{display: inline-block;}
+
+#noticename{display: inline-block; height:10%;}
+#noticedate{display: inline-block;}
+#detail_back{display: inline-block; width:180px; padding-left: 10px 30px; float:right;}
+
+#updatebtn1{display: inline-block;}
+#updatebtn2{display: inline-block;}
+
+#deletea:hover{color:white; text-decoration: underline;}
+
+#select{display:inline-block;}
+#search{display:inline-block;}
+
+#catagory{float:right;}
+
+
+.btn-outline-delete{color:red; background-color:transparent; background-image:none; border-color:red}
+.btn-outline-delete:hover{color:white; background-color:red; border-color:red}
+.btn-outline-delete.focus,.btn-outline-delete:focus{box-shadow:0 0 0 .2rem rgba(40,167,69,.5)}
+

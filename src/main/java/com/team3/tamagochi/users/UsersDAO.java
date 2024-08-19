@@ -95,6 +95,24 @@ public class UsersDAO {
 		return sqlSession.selectOne(NAMESPACE + "findPW", usersDTO);
 	}
 	
+	// 네이버 API로 로그인시 회원 정보를 DB에 저장하는 메서드
+	public int insertNaverProfile(UsersDTO usersDTO) throws Exception{
+		
+		return sqlSession.insert(NAMESPACE + "insertNaverProfile", usersDTO);
+	}
+	
+	// 거래내역을 조회하는 메서드
+	public List<TransactionDTO> getTradeList(TransactionDTO transactionDTO) throws Exception{
+		
+		return sqlSession.selectList(NAMESPACE + "getTradeList", transactionDTO);
+	}
+	
+	// 거래내역 중 transaction type을 선택해서 조회하는 메소드
+	public List<TransactionDTO> selectType(TransactionDTO transactionDTO) throws Exception{
+		
+		return sqlSession.selectList(NAMESPACE + "selectType", transactionDTO);
+	}
+	
 	
 	
 	

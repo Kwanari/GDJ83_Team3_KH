@@ -14,7 +14,7 @@
   	</select>
   	
   	<update id="feedPet" parameterType="MyPetDTO">
-  		UPDATE MY_PET SET PET_HUNGRY = PET_HUNGRY + 10, PET_EXP = PET_EXP + 20 WHERE PET_NUM = #{pet_num}
+  		UPDATE MY_PET SET PET_HUNGRY = PET_HUNGRY + 10, PET_EXP = PET_EXP + 20 , PET_WASHROOM = PET_WASHROOM + 30 WHERE PET_NUM = #{pet_num}
   	</update>
   	
   	<update id="strollPet" parameterType="MyPetDTO">
@@ -22,7 +22,7 @@
   	</update>
   	
   	<update id="cleanPet" parameterType="MyPetDTO">
-  		UPDATE MY_PET SET PET_HP = PET_HP + 10 WHERE PET_NUM = #{pet_num}
+  		UPDATE MY_PET SET PET_HP = PET_HP + 10, PET_WASHROOM = 0 WHERE PET_NUM = #{pet_num}
   	</update>
   	
   	<select id="getPetExp" parameterType="MyPetDTO" resultType="java.lang.Long">
