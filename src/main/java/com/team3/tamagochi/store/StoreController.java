@@ -12,7 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -20,12 +22,32 @@ import com.team3.tamagochi.boards.util.Pager;
 import com.team3.tamagochi.files.FileDown;
 import com.team3.tamagochi.users.UsersDTO;
 
+
 @RequestMapping("/store/*")
 @Controller
 public class StoreController {
 
 	@Autowired
 	StoreService storeService;
+	
+	//==============================결제 관련 메소드=============================
+	//==============================결제 관련 메소드=============================
+	//==============================결제 관련 메소드=============================
+	
+	@GetMapping("purchaseItem")
+	public void purchaseItem() throws Exception {
+		
+	}
+	
+	@ResponseBody
+	@PostMapping("purchaseComplete")
+	public void purchaseComplete(@RequestBody Map<String,Object> map) throws Exception {
+		
+	System.out.println(map.get("payment_id"));
+	System.out.println(map.get("item_name"));
+	System.out.println(map.get("totalAmount"));
+		
+	}
 	
 	
 	//==============================위시리스트 관련 메소드=============================
