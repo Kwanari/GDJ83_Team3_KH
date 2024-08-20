@@ -15,6 +15,7 @@
             	<div class="container mt-5">
 					<div class="row tm-content-row">
 					  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 tm-block-col">
+						<form action="purchaseItem" method="get" id="frm">
 						<div class="tm-bg-primary-dark tm-block tm-block-products">
 							<div class="tm-product-table-container" id="wishdiv">
 							<table class="table table-hover tm-table-small tm-product-table">
@@ -36,7 +37,7 @@
 							  <tbody id="checkdiv">
 									<c:forEach items="${wishlist}" var="list">
 										<tr>
-											<td scope="row"><input type="checkbox" class="ch" data-wnum="${list.wishlist_num}"/></td>
+											<td scope="row"><input type="checkbox" class="ch" data-wnum="${list.wishlist_num}" data-inum="${list.itemDTO.item_num}"/></td>
 											<td><div class="tm-gray-circle"><img src="/resources/img/item/${list.itemDTO.itemFileDTO.file_name}" width="80" alt="Avatar Image" class="rounded-circle"></div></td>
 											<td class="tm-product-name">${list.itemDTO.item_name}</td>
 											<td>${list.itemDTO.item_description}</td>
@@ -55,12 +56,11 @@
 							</table>
 						  </div>
 						  <!-- table container -->
-						  <a href="add-product.html"
-							class="btn btn-primary mb-3">구매하기</a>
-						  <button class="btn btn-primary">
-							선물하기
-						  </button>
+						   <input type="hidden" name="ar" id="arr">
+						  <button class="btn btn-primary" id="purchasebtn" type="button">구매하기</button>
+						  <a class="btn btn-primary" href="#">선물하기</a>
 						</div>
+					</form>
 					  </div>
 					  </div>
 					</div>

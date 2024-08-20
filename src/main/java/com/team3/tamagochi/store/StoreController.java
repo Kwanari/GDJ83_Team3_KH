@@ -1,5 +1,6 @@
 package com.team3.tamagochi.store;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,12 +15,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.team3.tamagochi.boards.util.Pager;
 import com.team3.tamagochi.files.FileDown;
+import com.team3.tamagochi.users.TransactionDTO;
 import com.team3.tamagochi.users.UsersDTO;
 
 
@@ -34,19 +37,46 @@ public class StoreController {
 	//==============================결제 관련 메소드=============================
 	//==============================결제 관련 메소드=============================
 	
+	//결제할 제품을 결제창으로 가져오는 메소드
 	@GetMapping("purchaseItem")
-	public void purchaseItem() throws Exception {
+	public void purchaseItem(@RequestParam List<Long> ar, Model model) throws Exception {
+		List<ItemDTO> list = new ArrayList<ItemDTO>();
 		
+		for(Long a:ar) {
+			
+			ItemDTO itemDTO = new ItemDTO();
+			itemDTO.setItem_num(a);
+			
+			itemDTO = storeService.getItemDetail(itemDTO);
+			
+			list.add(itemDTO);
+		}
+		
+		model.addAttribute("purchaseList", list);
+
 	}
 	
-	@ResponseBody
+	//카카오페이 결제 후 DB 저장
 	@PostMapping("purchaseComplete")
-	public void purchaseComplete(@RequestBody Map<String,Object> map) throws Exception {
+	public String purchaseComplete(@RequestBody TransactionDTO transactionDTO, HttpSession session, Model model) throws Exception {
 		
-	System.out.println(map.get("payment_id"));
-	System.out.println(map.get("item_name"));
-	System.out.println(map.get("totalAmount"));
+		System.out.println(transactionDTO.getItem_num());
+		System.out.println(transactionDTO.getTransaction_amount());
+		System.out.println(transactionDTO.getTransaction_order());
 		
+		UsersDTO usersDTO = (UsersDTO) session.getAttribute("users_info");
+		transactionDTO.setUser_id(usersDTO.getUser_id());
+		transactionDTO.setTransaction_type("구입");
+		
+		int result = storeService.addTransaction(transactionDTO);
+		
+		if(result==0) {
+			model.addAttribute("result", "DB저장 실패");
+			model.addAttribute("url", "/");
+			return "commons/message";
+		}
+		
+	return "store/purchaseComplete";
 	}
 	
 	
@@ -122,25 +152,6 @@ public class StoreController {
 	//============================== 상점,아이템관련 메소드 =============================
 	//============================== 상점,아이템관련 메소드 =============================
 	//============================== 상점,아이템관련 메소드 =============================
-	
-//	@GetMapping("fileDown") // void라면 url경로를 따라감
-//	public String fileDown(ItemDTO itemDTO, Pager pager, Model model) throws Exception {
-//		
-//		System.out.println("fileDown gogo");
-//		pager.setPerPage(6);
-//		
-//		System.out.println("fileDown 카테고리 : "+itemDTO.getCategory_num());
-//
-//		List<ItemDTO> list = storeService.getItemList(itemDTO, pager);
-//		
-//		List<ItemFileDTO> itemFileDTOList = storeService.filedetail(list);
-//		
-//		model.addAttribute("fileList", itemFileDTOList);
-//		model.addAttribute("directory", "item");
-//		
-//		
-//		return "fileDownView";
-//	}
 
 	@GetMapping("itemListRefresh")
 	public String getItemList(ItemDTO itemDTO, Pager pager, Model model) throws Exception {

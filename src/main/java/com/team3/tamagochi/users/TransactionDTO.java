@@ -12,10 +12,19 @@ public class TransactionDTO {
 	private Date transaction_date;
 	private Long transaction_amount;
 	private String transaction_type;
+	private String transaction_order;
 	// ITEM 테이블을 조인시 필요한 dto
 	private ItemDTO itemDTO;
 	
 	
+	
+	
+	public String getTransaction_order() {
+		return transaction_order;
+	}
+	public void setTransaction_order(String transaction_order) {
+		this.transaction_order = transaction_order;
+	}
 	public ItemDTO getItemDTO() {
 		return itemDTO;
 	}

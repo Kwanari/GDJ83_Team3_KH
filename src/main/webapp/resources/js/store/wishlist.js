@@ -4,23 +4,49 @@ const checkdiv = document.getElementById("checkdiv");
 const chAll = document.getElementById("chAll")
 const ch = document.getElementsByClassName("ch")
 const delAll = document.getElementById("delAll")
+const purchasebtn = document.getElementById("purchasebtn")
+const arr = document.getElementById("arr")
+const frm = document.getElementById("frm")
 
 let wishnum = 0;
+let itemnum = 0;
+
+purchasebtn.addEventListener("click",()=>{
+    let ar = [];
+    
+    for(check of ch){
+        itemnum = check.getAttribute("data-inum")
+        if(check.checked){
+            ar.push(itemnum)
+        } else {
+            for(i=0;i<ar.length;i++){
+                if(ar[i]===itemnum){
+                    ar.splice(i,1)
+                }
+            }
+        }
+    }
+
+    arr.value = ar
+
+    frm.submit()
+    
+})
 
 
 //체크박스 전체 체크 되면 전체선택 박스 체크기능
 checkdiv.addEventListener("click", (e)=>{
     let flag = false;
 
-    for(check of ch){
-        if(e.target.classList.contains("ch")){
-            for(check of ch){
-                if(check.checked){
-                    flag=true;
-                } else {
-                    flag=false;
-                    break
-                }
+    if(e.target.classList.contains("ch")){
+        for(check of ch){
+            console.log(check.checked)
+
+            if(!check.checked){
+                flag = false;
+                break;
+            } else {
+                flag = true;
             }
         }
     }
